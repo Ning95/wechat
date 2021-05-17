@@ -32,7 +32,7 @@
 //    self.contentAttributedString = [[NSAttributedString alloc] initWithString:commentModel.all attributes:attr];
     _contentString = commentModel.all;
     UIFont *commentFont = [UIFont systemFontOfSize:12.0];
-    contentLabelH = [self.contentString boundingRectWithSize:CGSizeMake(contentLabelW, MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:commentFont} context:nil].size.height + 8;
+    contentLabelH = [self.contentString boundingRectWithSize:CGSizeMake(contentLabelW, MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:commentFont} context:nil].size.height;
     
     self.contentLabelF = CGRectMake(contentLabelX, contentLabelY, contentLabelW, contentLabelH);
     

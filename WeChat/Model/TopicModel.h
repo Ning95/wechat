@@ -9,13 +9,15 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface TopicModel : NSObject
+@interface TopicModel : NSObject <NSSecureCoding>
 
 @property(nonatomic, copy) NSString *icon;
 @property(nonatomic, copy) NSString *userName;
 @property(nonatomic, copy) NSString *content;
 @property(nonatomic, strong) NSArray *commentModels;
 
+
+- (void)configWithDictionary:(NSDictionary *)dictionary :(NSArray *) commentModels;
 @end
 
 NS_ASSUME_NONNULL_END

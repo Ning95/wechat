@@ -13,8 +13,8 @@
 
 @interface TopicTableViewCell()<UITableViewDelegate, UITableViewDataSource>
     @property(nonatomic, strong) UIImageView *icon;
-    @property(nonatomic, strong) UITextView *nameView;
-    @property(nonatomic, strong) UITextView *contentTopicView;
+    @property(nonatomic, strong) UILabel *nameView;
+    @property(nonatomic, strong) UILabel *contentTopicView;
     @property(nonatomic, strong) UITableView *commentTableView;
 @end
 
@@ -28,10 +28,10 @@
         _icon = [[UIImageView alloc] init];
         [self.contentView addSubview:_icon];
         
-        _nameView = [[UITextView alloc] init];
+        _nameView = [[UILabel alloc] init];
         [self.contentView addSubview:_nameView];
         
-        _contentTopicView = [[UITextView alloc] init];
+        _contentTopicView = [[UILabel alloc] init];
         [self.contentView addSubview:_contentTopicView];
         
         
@@ -51,19 +51,43 @@
 - (void)setTopicViewModel:(TopicCellViewModel *)topicViewModel
 {
     _topicViewModel = topicViewModel;
+//    NSThread *downLoadImageThread = [[NSThread alloc] initWithBlock:^{
+//
+//    }];
+//    downLoadImageThread.name = @"downLoadImageThread";
+//    [downLoadImageThread start];
     
+    dispatch_queue_global_t downloadQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+    dispatch_queue_main_t mainQueue = dispatch_get_main_queue();
+    dispatch_async(downloadQueue, ^{
+        NSData *imageData = [NSData dataWithContentsOfURL:[NSURL URLWithString:topicViewModel.topicModel.icon]];
+        UIImage *image = [UIImage imageWithData:imageData];
+        
+        dispatch_async(mainQueue, ^{
+            self.icon.frame = topicViewModel.iconF;
+            self.icon.image = image;
+            UIBezierPath *maskPath = [UIBezierPath bezierPathWithRoundedRect:self.icon.bounds byRoundingCorners:UIRectCornerAllCorners cornerRadii:CGSizeMake(self.icon.bounds.size.width/6, self.icon.bounds.size.height/6)];
+            CAShapeLayer *maskLayer = [[CAShapeLayer alloc]init];
+            //设置大小
+            maskLayer.frame = self.icon.bounds;
+            //设置图形样子
+            maskLayer.path = maskPath.CGPath;
+            self.icon.layer.mask = maskLayer;
+        });
+    });
     //头像设置
-    NSData *imageData = [NSData dataWithContentsOfURL:[NSURL URLWithString:topicViewModel.topicModel.icon]];
+//    NSData *imageData = [NSData dataWithContentsOfURL:[NSURL URLWithString:topicViewModel.topicModel.icon]];
     // 添加图片
-    self.icon.frame = topicViewModel.iconF;
-    self.icon.image = [UIImage imageWithData:imageData];
-    UIBezierPath *maskPath = [UIBezierPath bezierPathWithRoundedRect:self.icon.bounds byRoundingCorners:UIRectCornerAllCorners cornerRadii:CGSizeMake(self.icon.bounds.size.width/6, self.icon.bounds.size.height/6)];
-    CAShapeLayer *maskLayer = [[CAShapeLayer alloc]init];
-    //设置大小
-    maskLayer.frame = self.icon.bounds;
-    //设置图形样子
-    maskLayer.path = maskPath.CGPath;
-    self.icon.layer.mask = maskLayer;
+//    self.icon.frame = topicViewModel.iconF;
+//    self.icon.image = [UIImage imageWithData:imageData];
+//        UIBezierPath *maskPath = [UIBezierPath bezierPathWithRoundedRect:self.icon.bounds byRoundingCorners:UIRectCornerAllCorners cornerRadii:CGSizeMake(self.icon.bounds.size.width/6, self.icon.bounds.size.height/6)];
+//        CAShapeLayer *maskLayer = [[CAShapeLayer alloc]init];
+//        //设置大小
+//        maskLayer.frame = self.icon.bounds;
+//        //设置图形样子
+//        maskLayer.path = maskPath.CGPath;
+//        self.icon.layer.mask = maskLayer;
+    
     
     // 添加双击手势
     UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(beginWobble:)];
@@ -81,6 +105,11 @@
     self.contentTopicView.frame = topicViewModel.contentF;
     self.contentTopicView.font = [UIFont systemFontOfSize:14.0];
     self.contentTopicView.text = topicViewModel.topicModel.content;
+    // 自动折行设置
+    // 为了使标签文本适合其边界矩形而使用的最大行数。此属性的默认值为1。
+    // 要删除任何最大限​​制，并根据需要使用尽可能多的行，请将此属性的值设置为0。
+    self.contentTopicView.lineBreakMode = NSLineBreakByWordWrapping;
+    self.contentTopicView.numberOfLines = 0;
     
     
     self.commentTableView.frame = topicViewModel.tableviewF;

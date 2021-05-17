@@ -9,7 +9,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface CommentModel : NSObject
+@interface CommentModel : NSObject <NSSecureCoding>
 
 @property(nonatomic, copy) NSString *from;
 @property(nonatomic, copy) NSString *to;

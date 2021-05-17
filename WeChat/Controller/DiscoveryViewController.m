@@ -103,13 +103,13 @@
         // 添加图片
         UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(15, 15, 40, 40)];
         imageView.image = [UIImage imageWithData:imageData];
-        UIBezierPath *maskPath = [UIBezierPath bezierPathWithRoundedRect:imageView.bounds byRoundingCorners:UIRectCornerAllCorners cornerRadii:CGSizeMake(imageView.bounds.size.width/6, imageView.bounds.size.height/6)];
-        CAShapeLayer *maskLayer = [[CAShapeLayer alloc]init];
-        //设置大小
-        maskLayer.frame = imageView.bounds;
-        //设置图形样子
-        maskLayer.path = maskPath.CGPath;
-        imageView.layer.mask = maskLayer;
+//        UIBezierPath *maskPath = [UIBezierPath bezierPathWithRoundedRect:imageView.bounds byRoundingCorners:UIRectCornerAllCorners cornerRadii:CGSizeMake(imageView.bounds.size.width/6, imageView.bounds.size.height/6)];
+//        CAShapeLayer *maskLayer = [[CAShapeLayer alloc]init];
+//        //设置大小
+//        maskLayer.frame = imageView.bounds;
+//        //设置图形样子
+//        maskLayer.path = maskPath.CGPath;
+//        imageView.layer.mask = maskLayer;
         
         // 添加双击手势
         UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(beginWobble:)];

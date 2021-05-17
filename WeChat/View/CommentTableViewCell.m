@@ -11,7 +11,7 @@
 #import "CommentViewModel.h";
 
 @interface CommentTableViewCell()
-@property(nonatomic, strong) UITextView *commentView;
+@property(nonatomic, strong) UILabel *commentView;
 @end
 
 @implementation CommentTableViewCell
@@ -20,7 +20,7 @@
 {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
-        _commentView = [[UITextView alloc] init];
+        _commentView = [[UILabel alloc] init];
         [self.contentView addSubview:_commentView];
 //        self.selectionStyle = UITableViewCellSelectionStyleNone;
         self.backgroundColor = [UIColor clearColor];
@@ -36,6 +36,8 @@
     
     self.commentView.frame = commentViewModel.contentLabelF;
     self.commentView.text = commentViewModel.contentString;
+    self.commentView.lineBreakMode = NSLineBreakByWordWrapping;
+    self.commentView.numberOfLines = 0;;
     self.commentView.backgroundColor = [UIColor clearColor];
     self.commentView.font = [UIFont systemFontOfSize:12.0];
 }
